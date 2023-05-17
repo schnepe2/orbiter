@@ -29,6 +29,7 @@ set(common_src
 	Vecmat.cpp
 	VectorMap.cpp
     ConsoleManager.cpp
+	TimeData.cpp
 # Launchpad
 	Launchpad.cpp
 	LpadTab.cpp
@@ -60,6 +61,7 @@ set(common_src
 # Body classes
 	Body.cpp
 	BodyIntegrator.cpp
+	PinesGrav.cpp
 	Celbody.cpp
 	Planet.cpp
 	Rigidbody.cpp
@@ -155,7 +157,6 @@ set(Orbiter_includes
 	${CMAKE_SOURCE_DIR}/Orbitersdk/include
 	${CMAKE_SOURCE_DIR}/OVP
 	${CMAKE_CURRENT_BINARY_DIR}
-	${ZLIB_INCLUDE_DIR}
 	${HTMLHELP_INCLUDE_DIR}
 	${DX7SDK_INCLUDE_DIR}
 )
@@ -165,7 +166,7 @@ set(Orbiter_common_libs
 	comctl32.lib
 	UxTheme.lib
 	${HTML_HELP_LIBRARY}
-	${ZLIB_LIB}
+	zlib
 	${HTMLHELP_LIB}
 	$<TARGET_FILE:Orbitersdk>
 	$<TARGET_FILE:DlgCtrl>
@@ -199,7 +200,6 @@ if(BUILD_ORBITER_DX7)
 	set_target_properties(Orbiter
 		PROPERTIES
 		LINK_FLAGS "/SUBSYSTEM:WINDOWS"
-		COMPILE_FLAGS "${CompileFlags}"
 		RUNTIME_OUTPUT_DIRECTORY ${ORBITER_BINARY_ROOT_DIR}
 		COMPILE_DEFINITIONS "INLINEGRAPHICS;DIRECTINPUT_VERSION=0x0800"
 		ENABLE_EXPORTS 1
@@ -247,12 +247,11 @@ if(BUILD_ORBITER_SERVER)
 
 	add_executable(Orbiter_server
 		${common_src}
-	)
+	 )
 
 	set_target_properties(Orbiter_server
 		PROPERTIES
 		LINK_FLAGS "/SUBSYSTEM:CONSOLE /ENTRY:WinMainCRTStartup"
-		COMPILE_FLAGS "${CompileFlags}"
 		RUNTIME_OUTPUT_DIRECTORY ${ORBITER_BINARY_MODULE_DIR}/Server
 		OUTPUT_NAME Orbiter
 		VS_DEBUGGER_WORKING_DIRECTORY ${ORBITER_BINARY_ROOT_DIR}
